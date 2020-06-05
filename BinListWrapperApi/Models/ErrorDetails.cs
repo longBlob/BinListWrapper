@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BinListWrapperApi.Models
 {
+    //
     public class ErrorDetails
     {
         public int StatusCode { get; set; }
