@@ -109,18 +109,23 @@ namespace BinListWrapperApi.Controllers
        
         public async Task<ActionResult> GetBin(int id)
         {
+            //create a strongly type request model..
 
+            #region Card length check
             int cardid = GetIntegerLength(id);
-            //check if card  id enterd is less than 4 digits 
-            if (cardid < 4)
+            //check if card  id enterd is less than 6 digits 
+            if (cardid < 6)
             {
 
                 _logger.LogCritical("_logger: LogCritical: Card Id entered is less than  4 digits ");
                 // bad request
                 return BadRequest(new ApiResponse(400, $"Card Id entered is less than  4 digits {id}"));
-            }
+            } 
+            #endregion
             IRestResponse<CardInfo> response ;
             // put this in a service
+            #region BinList Wrapper Api request
+
             var client = new RestClient("https://lookup.binlist.net");
 
             var request = new RestRequest(id.ToString(), DataFormat.Json);
@@ -128,19 +133,19 @@ namespace BinListWrapperApi.Controllers
             response = await client.ExecuteAsync<CardInfo>(request);
             if (response == null)
             {
-               
+
                 _logger.LogCritical("_logger: Empty Response from BinList Api");
-              
+
                 return NotFound(new ApiResponse(404, $"Card Information not found with id {id}"));
             }
 
-            if (response != null && (int)response.StatusCode ==0)
+            if (response != null && (int)response.StatusCode == 0)
             {
 
                 _logger.LogCritical("_logger: Could not Connect to BinList Api");
-               // return StatusCode(StatusCodes.Status500InternalServerError);
-                return StatusCode(StatusCodes.Status500InternalServerError,new ApiResponse(500, $"Could not Connect to BinList Api to retrieve info for Card with id: {id}"));
-            
+                // return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse(500, $"Could not Connect to BinList Api to retrieve info for Card with id: {id}"));
+
             }
             var settings = new JsonSerializerSettings
             {
@@ -149,20 +154,20 @@ namespace BinListWrapperApi.Controllers
             };
 
 
-            CardInfo crd = JsonConvert.DeserializeObject<CardInfo>(response.Content,settings) ;
-        
-       
+            CardInfo crd = JsonConvert.DeserializeObject<CardInfo>(response.Content, settings);
+
+
             HttpStatusCode statusCode = response.StatusCode;
             int numericStatusCode = (int)statusCode;
             if (numericStatusCode == 404)
             {
-                
+
                 _logger.LogError($"_logger: Card Information not found with id {id}");
 
                 return NotFound(new ApiResponse(404, $"Card Information not found with id {id}"));
-              //  return NotFound($"Card Information not found with id {id}");
+                //  return NotFound($"Card Information not found with id {id}");
             }
-          
+
 
             if (numericStatusCode == 200)
             {
@@ -173,8 +178,9 @@ namespace BinListWrapperApi.Controllers
             }
 
             else
-                
-                return BadRequest(new ApiResponse(numericStatusCode, $"Bad Request"));
+
+                return BadRequest(new ApiResponse(numericStatusCode, $"Bad Request")); 
+            #endregion
         }
 
       

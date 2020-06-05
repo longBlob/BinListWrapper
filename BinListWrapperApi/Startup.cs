@@ -40,12 +40,13 @@ namespace BinListWrapperApi
 
             services.AddControllers();
             services.AddResponseCaching();
-           
+           // add swagger
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             // configure jwt authentication
+            // requirements not clear on whether to implement oauth server or using an existing oauth implementation
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
@@ -67,6 +68,7 @@ namespace BinListWrapperApi
             });
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            //add
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
