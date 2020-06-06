@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BinListWrapperApi</name>
+    </assembly>
+    <members>
+        <member name="M:BinListWrapperApi.Controllers.BinListController.GetBin(System.Int32)">
+            <summary>
+            get bearer token from Authenticate endpoint
+            Gets a card information from Binlist Api
+            </summary>
+            <param name="id"></param>   
+        </member>
+        <member name="M:BinListWrapperApi.Controllers.BinListController.Authenticate(BinListWrapperApi.Models.AuthenticateModel)">
+            <summary>
+            username = test
+            password = test
+            Authenticate and generates a Jwt token for user
+            </summary>
+            <param name="model"></param>   
+        </member>
+    </members>
+</doc>

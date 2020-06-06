@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,19 +21,21 @@ namespace BinListWrapperApi.Controllers
  
     [ApiController]
     [Route("[controller]")]
+
     public class BinListController : ControllerBase
     {
         private readonly ILogger _logger;
         private IUserService _userService;
 
-      
-
+     
         public BinListController(ILogger<BinListController> logger, IUserService userService)
         {
             _userService = userService;
             _logger = logger;
         }
-        public  int GetIntegerLength(int number)
+        
+    
+        private int GetIntegerLength(int number)
         {
             if (number < 100000)
             {
@@ -99,31 +102,36 @@ namespace BinListWrapperApi.Controllers
                 }
             }
         }
-        
-        
+
+        /// <summary>
+        /// get bearer token from Authenticate endpoint
+        /// Gets a card information from Binlist Api
+        /// </summary>
+        /// <param name="id"></param>   
         [HttpGet("GetCardInfo/{id}")]
+      
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
-       
         public async Task<ActionResult> GetBin(int id)
         {
+      
             //create a strongly type request model..
 
-            #region Card length check
-            int cardid = GetIntegerLength(id);
-            //check if card  id enterd is less than 6 digits 
-            if (cardid < 6)
+        #region Card length check
+        int cardid = GetIntegerLength(id);
+            //check if first digit is zero
+            if (id < 6)
             {
 
-                _logger.LogCritical("_logger: LogCritical: Card Id entered is less than  4 digits ");
+                _logger.LogCritical("_logger: LogCritical: Card Id entered is less than  6 digits ");
                 // bad request
-                return BadRequest(new ApiResponse(400, $"Card Id entered is less than  4 digits {id}"));
+                return BadRequest(new ApiResponse(400, $"Card Id entered is less than  6 digits {id}"));
             } 
             #endregion
             IRestResponse<CardInfo> response ;
-            // put this in a service
+            // put this  region in a service
             #region BinList Wrapper Api request
 
             var client = new RestClient("https://lookup.binlist.net");
@@ -183,8 +191,13 @@ namespace BinListWrapperApi.Controllers
             #endregion
         }
 
-      
 
+        /// <summary>
+        /// username = test
+        /// password = test
+        /// Authenticate and generates a Jwt token for user
+        /// </summary>
+        /// <param name="model"></param>   
 
         [AllowAnonymous]
    
