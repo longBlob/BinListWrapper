@@ -16,22 +16,32 @@ using RestSharp;
 namespace BinListWrapperApi.Controllers
  
 {
+    /// <summary>
+    /// Controller with two end points
+    /// BinList Controller
+    /// </summary>
 
     [Authorize]
- 
     [ApiController]
     [Route("[controller]")]
-
     public class BinListController : ControllerBase
     {
         private readonly ILogger _logger;
         private IUserService _userService;
+        private IBinlistWrapperService _binlistWrapperService;
 
-     
-        public BinListController(ILogger<BinListController> logger, IUserService userService)
+        /// <summary>
+        /// ctor 
+        /// BinList controller constructor
+        /// </summary>
+        /// <param name="logger"></param>  
+        /// <param name="userService"></param>  
+        ///   <param name="binlistWrapperService"></param>  
+        public BinListController(ILogger<BinListController> logger, IUserService userService, IBinlistWrapperService binlistWrapperService)
         {
             _userService = userService;
             _logger = logger;
+            _binlistWrapperService = binlistWrapperService;
         }
         
     
@@ -131,14 +141,11 @@ namespace BinListWrapperApi.Controllers
             } 
             #endregion
             IRestResponse<CardInfo> response ;
-            // put this  region in a service
-            #region BinList Wrapper Api request
-
-            var client = new RestClient("https://lookup.binlist.net");
-
-            var request = new RestRequest(id.ToString(), DataFormat.Json);
-            _logger.LogWarning("_logger: Connecting to Binlist Api");
-            response = await client.ExecuteAsync<CardInfo>(request);
+            
+         
+            response =  await _binlistWrapperService.GetCardDetails(id.ToString());
+          
+        
             if (response == null)
             {
 
@@ -188,7 +195,7 @@ namespace BinListWrapperApi.Controllers
             else
 
                 return BadRequest(new ApiResponse(numericStatusCode, $"Bad Request")); 
-            #endregion
+   
         }
 
 

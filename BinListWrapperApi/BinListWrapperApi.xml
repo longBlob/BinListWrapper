@@ -4,6 +4,21 @@
         <name>BinListWrapperApi</name>
     </assembly>
     <members>
+        <member name="T:BinListWrapperApi.Controllers.BinListController">
+            <summary>
+            Controller with two end points
+            BinList Controller
+            </summary>
+        </member>
+        <member name="M:BinListWrapperApi.Controllers.BinListController.#ctor(Microsoft.Extensions.Logging.ILogger{BinListWrapperApi.Controllers.BinListController},BinListWrapperApi.Services.IUserService,BinListWrapperApi.Services.IBinlistWrapperService)">
+            <summary>
+            ctor 
+            BinList controller constructor
+            </summary>
+            <param name="logger"></param>  
+            <param name="userService"></param>  
+              <param name="binlistWrapperService"></param>  
+        </member>
         <member name="M:BinListWrapperApi.Controllers.BinListController.GetBin(System.Int32)">
             <summary>
             get bearer token from Authenticate endpoint

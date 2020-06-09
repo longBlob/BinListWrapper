@@ -42,7 +42,7 @@ namespace BinListWrapperApi
             services.AddCors();
 
             services.AddControllers();
-            services.AddResponseCaching();
+          //  services.AddResponseCaching();
             // add swagger
             services.AddSwaggerGen(c =>
             {
@@ -66,17 +66,17 @@ namespace BinListWrapperApi
                     }
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+      {
+        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
                       Enter 'Bearer' [space] and then your token in the text input below.
                       \r\n\r\nExample: 'Bearer 12345abcdef'",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
+         Name = "Authorization",
+         In = ParameterLocation.Header,
+         Type = SecuritySchemeType.ApiKey,
+         Scheme = "Bearer"
+       });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
       {
         {
           new OpenApiSecurityScheme
@@ -126,7 +126,8 @@ namespace BinListWrapperApi
             });
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
-            //add
+            services.AddTransient<IBinlistWrapperService, BinListWrapperService>();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -135,8 +136,8 @@ namespace BinListWrapperApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-      //         app.ConfigureExceptionHandler(_log);
-    //   app.ConfigureExceptionHandler();
+     
+     //  app.ConfigureExceptionHandler();
             }
           app.UseSwagger();
 
