@@ -25,13 +25,9 @@ namespace BinListWrapperApi
     public class Startup
     {
       
-        public Startup( IConfiguration configuration)
-        {
-           
-            Configuration = configuration;
-          
-
-
+        public Startup(IConfiguration configuration)
+        {        
+            Configuration = configuration;        
         }
 
         public IConfiguration Configuration { get; }
@@ -42,7 +38,7 @@ namespace BinListWrapperApi
             services.AddCors();
 
             services.AddControllers();
-          //  services.AddResponseCaching();
+            //  services.AddResponseCaching();
             // add swagger
             services.AddSwaggerGen(c =>
             {
@@ -165,12 +161,6 @@ namespace BinListWrapperApi
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
-
-          
-
-         
-         
-
           ;
         }
     }
